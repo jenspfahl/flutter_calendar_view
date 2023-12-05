@@ -17,8 +17,13 @@ class RoundedEventTile extends StatelessWidget {
   /// Title of the tile.
   final String title;
 
+  /// Title of the tile.
+  final Widget? icon;
+
   /// Description of the tile.
   final String description;
+
+  final BoxBorder? border;
 
   /// Background color of tile.
   /// Default color is [Colors.blue]
@@ -47,9 +52,11 @@ class RoundedEventTile extends StatelessWidget {
   const RoundedEventTile({
     Key? key,
     required this.title,
+    this.icon,
     this.padding = EdgeInsets.zero,
     this.margin = EdgeInsets.zero,
     this.description = "",
+    this.border,
     this.borderRadius = BorderRadius.zero,
     this.totalEvents = 1,
     this.backgroundColor = Colors.blue,
@@ -65,24 +72,35 @@ class RoundedEventTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: borderRadius,
+        border: border,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (title.isNotEmpty)
-            Expanded(
-              child: Text(
-                title,
-                style: titleStyle ??
-                    TextStyle(
-                      fontSize: 20,
-                      color: backgroundColor.accent,
-                    ),
-                softWrap: true,
-                overflow: TextOverflow.fade,
-              ),
+          Flexible(
+            child: Wrap(
+              clipBehavior: Clip.antiAlias,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                if (icon != null)
+                  icon!,
+                if (icon != null)
+                  Text(" "),
+                if (title.isNotEmpty)
+                  Text(
+                    title,
+                    style: titleStyle ??
+                        TextStyle(
+                          fontSize: 20,
+                          color: backgroundColor.accent,
+                        ),
+                    softWrap: true,
+                    overflow: TextOverflow.fade,
+                  ),
+              ],
             ),
+          ),
           if (description.isNotEmpty)
             Expanded(
               child: Padding(
