@@ -98,6 +98,10 @@ class FilledCell<T extends Object?> extends StatelessWidget {
   /// color of highlighted cell title
   final Color highlightedTitleColor;
 
+  final Widget Function(List<CalendarEventData<T>>, int index)? getEventWidget;
+  final Color? Function(CalendarEventData<T>)? getEventBackgroundColor;
+  final Border? Function(CalendarEventData<T>)? getEventBorder;
+
   /// This class will defines how cell will be displayed.
   /// This widget will display all the events as tile below date title.
   const FilledCell({
@@ -114,6 +118,9 @@ class FilledCell<T extends Object?> extends StatelessWidget {
     this.titleColor = Constants.black,
     this.highlightedTitleColor = Constants.white,
     this.dateStringBuilder,
+    this.getEventWidget,
+    this.getEventBackgroundColor,
+    this.getEventBorder,
   }) : super(key: key);
 
   @override
@@ -156,10 +163,11 @@ class FilledCell<T extends Object?> extends StatelessWidget {
                       (index) => GestureDetector(
                         onTap: () =>
                             onTileTap?.call(events[index], events[index].date),
-                        child: Container(
+                        child: getEventWidget != null ? getEventWidget!(events, index) : Container(
                           decoration: BoxDecoration(
-                            color: events[index].color,
+                            color: getEventBackgroundColor != null ? getEventBackgroundColor!(events[index]) : events[index].color,
                             borderRadius: BorderRadius.circular(4.0),
+                            border: getEventBorder != null ? getEventBorder!(events[index]) : null,
                           ),
                           margin: EdgeInsets.symmetric(
                               vertical: 2.0, horizontal: 3.0),
@@ -174,7 +182,7 @@ class FilledCell<T extends Object?> extends StatelessWidget {
                                   maxLines: 1,
                                   style: events[0].titleStyle ??
                                       TextStyle(
-                                        color: events[index].color.accent,
+                                        color: getEventBackgroundColor != null ? getEventBackgroundColor!(events[index]) : events[index].color.accent,
                                         fontSize: 12,
                                       ),
                                 ),
