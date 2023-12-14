@@ -79,26 +79,21 @@ class RoundedEventTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Flexible(
-            child: Wrap(
-              clipBehavior: Clip.antiAlias,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                if (icon != null)
-                  icon!,
-                if (icon != null)
-                  Text(" "),
-                if (title.isNotEmpty)
-                  Text(
-                    title,
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  if (icon != null) WidgetSpan(child: this.icon!),
+                  if (icon != null) TextSpan(text: " "),
+                    TextSpan(
+                    text: title,
                     style: titleStyle ??
                         TextStyle(
                           fontSize: 20,
                           color: backgroundColor.accent,
                         ),
-                    softWrap: true,
-                    overflow: TextOverflow.fade,
                   ),
-              ],
+                ],
+              ),
             ),
           ),
           if (description.isNotEmpty)
